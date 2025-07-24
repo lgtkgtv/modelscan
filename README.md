@@ -7,7 +7,10 @@
 [![Supported Versions](https://img.shields.io/pypi/pyversions/modelscan.svg)](https://pypi.org/project/modelscan)
 [![pypi Version](https://img.shields.io/pypi/v/modelscan)](https://pypi.org/project/modelscan)
 [![License: Apache 2.0](https://img.shields.io/crates/l/apa)](https://opensource.org/license/apache-2-0/)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+
 # ModelScan: Protection Against Model Serialization Attacks
+
 Machine Learning (ML) models are shared publicly over the internet, within teams and across teams. The rise of Foundation Models have resulted in public ML models being increasingly consumed for further training/fine tuning. ML Models are increasingly used to make critical decisions and power mission-critical applications.
 Despite this, models are not yet scanned with the rigor of a PDF file in your inbox.
 
@@ -15,9 +18,9 @@ This needs to change, and proper tooling is the first step.
 
 ![ModelScan Preview](/imgs/modelscan-unsafe-model.gif)
 
-ModelScan is an open source project from [Protect AI](https://protectai.com/) that scans models to determine if they contain 
-unsafe code. It is the first model scanning tool to support multiple model formats. 
-ModelScan currently supports: H5, Pickle, and SavedModel formats. This protects you 
+ModelScan is an open source project from [Protect AI](https://protectai.com/?utm_campaign=Homepage&utm_source=ModelScan%20GitHub%20Page&utm_medium=cta&utm_content=Open%20Source) that scans models to determine if they contain
+unsafe code. It is the first model scanning tool to support multiple model formats.
+ModelScan currently supports: H5, Pickle, and SavedModel formats. This protects you
 when using PyTorch, TensorFlow, Keras, Sklearn, XGBoost, with more on the way.
 
 ## TL;DR
@@ -38,9 +41,9 @@ modelscan -p /path/to/model_file.pkl
 
 Models are often created from automated pipelines, others may come from a data scientist’s laptop. In either case the model needs to move from one machine to another before it is used. That process of saving a model to disk is called serialization.
 
-A **Model Serialization Attack** is where malicious code is added to the contents of a model during serialization(saving) before distribution — a modern version of the Trojan Horse. 
+A **Model Serialization Attack** is where malicious code is added to the contents of a model during serialization(saving) before distribution — a modern version of the Trojan Horse.
 
-The attack functions by exploiting the saving and loading process of models. When you load a model with `model = torch.load(PATH)`, PyTorch opens the contents of the file and begins to running the code within. The second you load the model the exploit has executed. 
+The attack functions by exploiting the saving and loading process of models. When you load a model with `model = torch.load(PATH)`, PyTorch opens the contents of the file and begins to running the code within. The second you load the model the exploit has executed.
 
 A **Model Serialization Attack** can be used to execute:
 
@@ -51,23 +54,36 @@ A **Model Serialization Attack** can be used to execute:
 
 These attacks are incredibly simple to execute and you can view working examples in our 📓[notebooks](https://github.com/protectai/modelscan/tree/main/notebooks) folder.
 
+## Enforcing And Automating Model Security
+
+ModelScan offers robust open-source scanning. If you need comprehensive AI security, consider [Guardian](https://protectai.com/guardian?utm_campaign=Guardian&utm_source=ModelScan%20GitHub%20Page&utm_medium=cta&utm_content=Open%20Source). It is our enterprise-grade model scanning product.
+
+![Guardian Overview](/imgs/guardian_overview.png)
+
+### Guardian's Features:
+
+1. **Cutting-Edge Scanning**: Access our latest scanners, broader model support, and automatic model format detection.
+2. **Proactive Security**: Define and enforce security requirements for Hugging Face models before they enter your environment—no code changes required.
+3. **Enterprise-Wide Coverage**: Implement a cohesive security posture across your organization, seamlessly integrating with your CI/CD pipelines.
+4. **Comprehensive Audit Trail**: Gain full visibility into all scans and results, empowering you to identify and mitigate threats effectively.
+
 ## Getting Started
 
 ### How ModelScan Works
 
-If loading a model with your machine learning framework automatically executes the attack, 
+If loading a model with your machine learning framework automatically executes the attack,
 how does ModelScan check the content without loading the malicious code?
 
-Simple, it reads the content of the file one byte at a time just like a string, looking for 
+Simple, it reads the content of the file one byte at a time just like a string, looking for
 code signatures that are unsafe. This makes it incredibly fast, scanning models in the time it
 takes for your computer to process the total filesize from disk(seconds in most cases). It also secure.
 
 ModelScan ranks the unsafe code as:
 
-* CRITICAL
-* HIGH
-* MEDIUM
-* LOW
+- CRITICAL
+- HIGH
+- MEDIUM
+- LOW
 
 ![ModelScan Flow Chart](/imgs/model_scan_flow_chart.png)
 
@@ -78,7 +94,7 @@ it opens you up for attack. Use your discretion to determine if that is appropri
 
 ### What Models and Frameworks Are Supported?
 
-This will be expanding continually, so look out for changes in our release notes. 
+This will be expanding continually, so look out for changes in our release notes.
 
 At present, ModelScan supports any Pickle derived format and many others:
 
@@ -90,7 +106,8 @@ At present, ModelScan supports any Pickle derived format and many others:
 |                                              | [keras.models.save(save_format= 'keras')](https://www.tensorflow.org/guide/keras/serialization_and_saving) | Keras V3 (Hierarchical Data Format) | Yes               |
 | Classic ML Libraries (Sklearn, XGBoost etc.) | pickle.dump(), dill.dump(), joblib.dump(), cloudpickle.dump()                                              | Pickle, Cloudpickle, Dill, Joblib   | Yes               |
 
-### Installation 
+### Installation
+
 ModelScan is installed on your systems as a Python package(Python 3.9 to 3.12 supported). As shown from above you can install
 it by running this in your terminal:
 
@@ -106,6 +123,7 @@ modelscan = ">=0.1.1"
 ```
 
 Scanners for Tensorflow or HD5 formatted models require installation with extras:
+
 ```bash
 pip install 'modelscan[ tensorflow, h5py ]'
 ```
@@ -114,10 +132,10 @@ pip install 'modelscan[ tensorflow, h5py ]'
 
 ModelScan supports the following arguments via the CLI:
 
-| Usage                                                                            | Argument         | Explanation                                             | 
+| Usage                                                                            | Argument         | Explanation                                             |
 |----------------------------------------------------------------------------------|------------------|---------------------------------------------------------|
-| ```modelscan -h ```                                                              | -h or --help     | View usage help                                         |
-| ```modelscan -v ```                                                              | -v or --version  | View version information                                |
+| ```modelscan -h```                                                              | -h or --help     | View usage help                                         |
+| ```modelscan -v```                                                              | -v or --version  | View version information                                |
 | ```modelscan -p /path/to/model_file```                                           | -p or --path     | Scan a locally stored model                             |
 | ```modelscan -p /path/to/model_file --settings-file ./modelscan-settings.toml``` | --settings-file  | Scan a locally stored model using custom configurations |
 | ```modelscan create-settings-file```                                             | -l or --location | Create a configurable settings file                     |
@@ -125,16 +143,58 @@ ModelScan supports the following arguments via the CLI:
 | ```modelscan -r reporting-format -o file-name```                                             | -o or --output-file | Optional file name for output report                  |
 | ```modelscan --show-skipped```                          | --show-skipped | Print a list of files that were skipped      during the scan   |
 
-
 Remember models are just like any other form of digital media, you should scan content from any untrusted source before use.
 
-##### CLI Exit Codes
+#### CLI Exit Codes
+
 The CLI exit status codes are:
+
 - `0`: Scan completed successfully, no vulnerabilities found
 - `1`: Scan completed successfully, vulnerabilities found
 - `2`: Scan failed, modelscan threw an error while scanning
 - `3`: No supported files were passed to the tool
 - `4`: Usage error, CLI was passed invalid or incomplete options
+
+### Using ModelScan Programmatically in Python
+
+While ModelScan can be easily used via CLI, you can also integrate it directly into your Python applications or workflows.
+
+```python
+from modelscan.modelscan import ModelScan
+from modelscan.settings import DEFAULT_SETTINGS
+
+# Initialize ModelScan with default settings
+scanner = ModelScan(settings=DEFAULT_SETTINGS)
+
+# Scan a model file or directory 
+results = scanner.scan("/path/to/model_file.pkl")
+
+# Check if issues were found
+if scanner.issues.all_issues:
+    print(f"Found {len(scanner.issues.all_issues)} issues!")
+    
+    # Access issues by severity
+    issues_by_severity = scanner.issues.group_by_severity()
+    for severity, issues in issues_by_severity.items():
+        print(f"{severity}: {len(issues)} issues")
+        
+# Generate a report (default is console output)
+scanner.generate_report()
+```
+
+You can customize the scan behavior with your own settings:
+
+```python
+# Start with default settings and customize
+custom_settings = DEFAULT_SETTINGS.copy()
+
+# Update settings as needed
+custom_settings["reporting"]["module"] = "modelscan.reporting.json_report.JSONReport"
+custom_settings["reporting"]["settings"]["output_file"] = "scan_results.json"
+
+# Initialize with custom settings
+scanner = ModelScan(settings=custom_settings)
+```
 
 ### Understanding The Results
 
@@ -143,9 +203,9 @@ Once a scan has been completed you'll see output like this if an issue is found:
 ![ModelScan Scan Output](https://github.com/protectai/modelscan/raw/main/imgs/cli_output.png)
 
 Here we have a model that has an unsafe operator for both `ReadFile` and `WriteFile` in the model.
-Clearly we do not want our models reading and writing files arbitrarily. We would now reach out 
+Clearly we do not want our models reading and writing files arbitrarily. We would now reach out
 to the creator of this model to determine what they expected this to do. In this particular case
-it allows an attacker to read our AWS credentials and write them to another place. 
+it allows an attacker to read our AWS credentials and write them to another place.
 
 That is a firm NO for usage.
 
@@ -182,13 +242,13 @@ to learn more!
 
 ## Licensing
 
-Copyright 2023 Protect AI 
+Copyright 2024 Protect AI
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+   <http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -201,9 +261,7 @@ limitations under the License.
 We were heavily inspired by [Matthieu Maitre](http://mmaitre314.github.io) who built [PickleScan](https://github.com/mmaitre314/picklescan).
 We appreciate the work and have extended it significantly with ModelScan. ModelScan is OSS’ed in the similar spirit as PickleScan.
 
-## Contributing 
+## Contributing
 
-We would love to have you contribute to our open source ModelScan project. 
-If you would like to contribute, please follow the details on [Contribution page](https://github.com/protectai/modelscan/blob/main/CONTRIBUTING.md). 
-
- 
+We would love to have you contribute to our open source ModelScan project.
+If you would like to contribute, please follow the details on [Contribution page](https://github.com/protectai/modelscan/blob/main/CONTRIBUTING.md).
